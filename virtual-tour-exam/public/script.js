@@ -1,12 +1,13 @@
 /**
  * LuxeEstate 360° - Interaktiv Virtual Uy Sayohati
- * script.js - Panorama, Hotspotlar, Mini-xarita va Telegram aloqasi
+ * script.js - 5 ta xona (Living, Kitchen, Bedroom, Bathroom, Toilet) + O'z rasmini yuklash logikasi
  */
 
 // ==========================================================================
-// 1. XONALAR VA JIHOZLAR BAZASI (ROOMS DATA)
+// 1. XONALAR VA JIHOZLAR BAZASI (5 TA TO'LIQ XONA)
 // ==========================================================================
 const ROOMS_DATA = {
+  // 1. MEHMONXONA
   'living-room': {
     id: 'living-room',
     name: 'Mehmonxona',
@@ -18,12 +19,11 @@ const ROOMS_DATA = {
     light: 'Katta vitraj derazalar',
     furnishing: 'To\'liq premium mebel',
     description: 'Keng va hashamatli yashash xonasi. Yuqori sifatli Italiya yumshoq mebellari, tabiiy eman parketi va quyosh nuri mo\'l tushuvchi panoramik vitraj derazalar bilan jihozlangan.',
-    voiceGuide: 'Mehmonxonaga xush kelibsiz! Ushbu keng zal o\'ttiz ikki kvadrat metr maydonga ega bo\'lib, tabiiy yorug\'lik bilan to\'liq ta\'minlangan. Siz o\'ng tomondagi belgi orqali oshxonaga, chap burchakdagi belgi orqali esa yotoqxonaga o\'tishingiz mumkin.',
+    voiceGuide: 'Mehmonxonaga xush kelibsiz! Ushbu keng zal o\'ttiz ikki kvadrat metr bo\'lib, tabiiy yorug\'lik bilan to\'liq ta\'minlangan. Barcha xonalarga shu yerdan o\'tishingiz mumkin.',
     image: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/combination_room.jpg',
-    mapCoords: { x: 120, y: 150 },
+    mapCoords: { x: 105, y: 155 },
     initialView: { pitch: -2, yaw: 0, hfov: 105 },
     hotspots: [
-      // 1. Oshxonaga o'tish
       {
         type: 'scene',
         targetRoom: 'kitchen',
@@ -32,7 +32,6 @@ const ROOMS_DATA = {
         title: 'Oshxonaga o\'tish',
         icon: 'fa-utensils'
       },
-      // 2. Yotoqxonaga o'tish
       {
         type: 'scene',
         targetRoom: 'bedroom',
@@ -41,7 +40,14 @@ const ROOMS_DATA = {
         title: 'Yotoqxonaga o\'tish',
         icon: 'fa-bed'
       },
-      // 3. Mebel: Divan
+      {
+        type: 'scene',
+        targetRoom: 'bathroom',
+        pitch: -3,
+        yaw: -45,
+        title: 'Vanna xonasiga o\'tish',
+        icon: 'fa-bath'
+      },
       {
         type: 'info',
         pitch: -18,
@@ -50,41 +56,29 @@ const ROOMS_DATA = {
         category: 'Yumshoq mebel',
         price: '$1,850',
         image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80',
-        description: 'Yuqori sifatli suv yuqmaydigan velur matosi bilan qoplangan premium burchak divani. Ergonomik suyanchiq va qulay dam olish zonasi.',
+        description: 'Yuqori sifatli suv yuqmaydigan velur matosi bilan qoplangan premium burchak divani.',
         features: ['Material: Italiya veluri', 'Karkas: Tabiiy eman', 'Kafolat: 5 yil']
-      },
-      // 4. Mebel: Panoramik deraza
-      {
-        type: 'info',
-        pitch: 6,
-        yaw: -55,
-        title: 'Panoramik Vitraj Oyna',
-        category: 'Arxitektura',
-        price: 'Komplektda',
-        image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80',
-        description: 'Germaniyaning 5 kamerali shovqin to\'suvchi profili va energiya tejamkor 3 qavatli oynalari.',
-        features: ['Shovqin izolyatsiyasi: 42 dB', 'Quyoshdan himoya (Low-E)', 'Argon gazi bilan to\'ldirilgan']
       }
     ]
   },
 
+  // 2. OSHXONA
   'kitchen': {
     id: 'kitchen',
     name: 'Oshxona',
     nameEn: 'Kitchen Lounge',
     subtitle: 'Zamonaviy marmar orolli va texnikali oshxona',
-    typeTag: 'Oshxona & Lounge',
+    typeTag: 'Oshxona',
     area: '18 m²',
     ceiling: '3.2 metr',
     light: 'Smart LED & Tabiiy yorug\'lik',
     furnishing: 'Bosch texnikasi & Marmar orol',
-    description: 'Yuqori did bilan yaratilgan oshxona. Tabiiy Carrara marmaridan yasalgan orol, sensorli yoritish tizimi hamda to\'liq o\'rnatilgan premium maishiy texnikalarga ega.',
-    voiceGuide: 'Hozir siz zamonaviy oshxonadasiz. Bu yerda o\'n sakkiz kvadrat metrda joylashgan shinam ovqatlanish maydoni, tabiiy marmar stol va zamonaviy texnikalar mujassamlashgan.',
+    description: 'Yuqori did bilan yaratilgan oshxona. Tabiiy Carrara marmaridan yasalgan orol va sensorli yoritish tizimiga ega.',
+    voiceGuide: 'Hozir siz zamonaviy oshxonadasiz. Bu yerda o\'n sakkiz kvadrat metrda joylashgan shinam ovqatlanish maydoni va marmar stol mavjud.',
     image: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/kiara_interior.jpg',
-    mapCoords: { x: 295, y: 90 },
+    mapCoords: { x: 252, y: 90 },
     initialView: { pitch: -2, yaw: 10, hfov: 105 },
     hotspots: [
-      // 1. Mehmonxonaga qaytish
       {
         type: 'scene',
         targetRoom: 'living-room',
@@ -93,7 +87,6 @@ const ROOMS_DATA = {
         title: 'Mehmonxonaga qaytish',
         icon: 'fa-couch'
       },
-      // 2. Yotoqxonaga o'tish
       {
         type: 'scene',
         targetRoom: 'bedroom',
@@ -102,7 +95,6 @@ const ROOMS_DATA = {
         title: 'Yotoqxonaga o\'tish',
         icon: 'fa-bed'
       },
-      // 3. Jihoz: Marmar orol
       {
         type: 'info',
         pitch: -22,
@@ -111,24 +103,13 @@ const ROOMS_DATA = {
         category: 'Oshxona jihozi',
         price: '$2,400',
         image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80',
-        description: 'Monolit tabiiy Carrara oq marmari. Issiqlikka va chizilishga bardoshli qoplama, qulay bar stullari bilan.',
+        description: 'Monolit tabiiy Carrara oq marmari. Issiqlikka va chizilishga bardoshli qoplama.',
         features: ['Material: 100% tabiiy marmar', 'Integratsiyalangan rozetkalar', 'Suv o\'tkazmaydigan qoplama']
-      },
-      // 4. Jihoz: Smart Plita
-      {
-        type: 'info',
-        pitch: -12,
-        yaw: 110,
-        title: 'Bosch Serie 8 Induksion Plita',
-        category: 'Maishiy texnika',
-        price: '$980',
-        image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80',
-        description: 'Sensorli boshqaruvga ega tezkor va xavfsiz induksion plita. A+++ energiya tejamkorlik klassi.',
-        features: ['Booster tezkor isitish', 'Bolalardan himoya qulfi', 'Smart Home integratsiyasi']
       }
     ]
   },
 
+  // 3. YOTOQXONA
   'bedroom': {
     id: 'bedroom',
     name: 'Yotoqxona',
@@ -139,13 +120,12 @@ const ROOMS_DATA = {
     ceiling: '3.2 metr',
     light: 'Yumshoq iliq kechki chiroqlar',
     furnishing: 'King Size krovat & Garderob',
-    description: 'Sokinlik va osoyishtalik uchun maxsus akustik devorlar bilan ajratilgan yotoqxona. Ortopedik matrasli keng krovat va katta qulay kiyim shkafi mavjud.',
-    voiceGuide: 'Yotoqxonaga xush kelibsiz! Bu xona shovqinsiz va shinam hordiq chiqarish uchun mo\'ljallangan. Xonada yigirma ikki kvadrat metr maydon, katta krovat va keng shkaf bor.',
+    description: 'Sokinlik va osoyishtalik uchun mo\'ljallangan yotoqxona. Ortopedik matrasli keng krovat va katta shkaf mavjud.',
+    voiceGuide: 'Yotoqxonaga xush kelibsiz! Bu xona shovqinsiz va shinam hordiq chiqarish uchun mo\'ljallangan.',
     image: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/hotel_room.jpg',
-    mapCoords: { x: 295, y: 225 },
+    mapCoords: { x: 357, y: 90 },
     initialView: { pitch: -2, yaw: 0, hfov: 105 },
     hotspots: [
-      // 1. Mehmonxonaga qaytish
       {
         type: 'scene',
         targetRoom: 'living-room',
@@ -154,16 +134,14 @@ const ROOMS_DATA = {
         title: 'Mehmonxonaga qaytish',
         icon: 'fa-couch'
       },
-      // 2. Oshxonaga o'tish
       {
         type: 'scene',
-        targetRoom: 'kitchen',
+        targetRoom: 'bathroom',
         pitch: -2,
-        yaw: 85,
-        title: 'Oshxonaga o\'tish',
-        icon: 'fa-utensils'
+        yaw: 110,
+        title: 'Vanna xonasiga o\'tish',
+        icon: 'fa-bath'
       },
-      // 3. Mebel: Krovat
       {
         type: 'info',
         pitch: -20,
@@ -172,20 +150,55 @@ const ROOMS_DATA = {
         category: 'Yotoqxona mebeli',
         price: '$1,650',
         image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
-        description: '200x200 sm o\'lchamdagi premium krovat. Mustaqil prujinali 7 zonali Magniflex ortopedik matrasi bilan.',
+        description: '200x200 sm o\'lchamdagi premium krovat. Magniflex ortopedik matrasi bilan.',
         features: ['O\'lchami: 200 x 200 sm', 'Gipoallergen matras', 'Bosh qismida yumshoq teri']
+      }
+    ]
+  },
+
+  // 4. VANNA XONASI
+  'bathroom': {
+    id: 'bathroom',
+    name: 'Vanna xonasi',
+    nameEn: 'Luxury Bathroom',
+    subtitle: 'Zamonaviy dush, vanna va marmar kafel',
+    typeTag: 'Sanuzel (Vanna)',
+    area: '12 m²',
+    ceiling: '3.0 metr',
+    light: 'Iliq LED & Oyna atrofi yorug\'lik',
+    furnishing: 'Jacuzzi, Dush & Smart sanuzel',
+    description: 'Hashamatli vanna xonasi. Issiq pol tizimi, katta oyna, gidromassajli vanna va nemis santexnikasi bilan jihozlangan.',
+    voiceGuide: 'Vanna xonasiga xush kelibsiz! Bu yerda o\'n ikki kvadrat metr maydonda issiq pol, qulay vanna va zamonaviy dush tizimi o\'rnatilgan.',
+    image: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/modern_bathroom.jpg',
+    mapCoords: { x: 295, y: 230 },
+    initialView: { pitch: -5, yaw: 0, hfov: 100 },
+    hotspots: [
+      {
+        type: 'scene',
+        targetRoom: 'living-room',
+        pitch: -2,
+        yaw: -170,
+        title: 'Mehmonxonaga qaytish',
+        icon: 'fa-couch'
       },
-      // 4. Mebel: Garderob
+      {
+        type: 'scene',
+        targetRoom: 'bedroom',
+        pitch: -2,
+        yaw: 45,
+        title: 'Yotoqxonaga o\'tish',
+        icon: 'fa-bed'
+      },
       {
         type: 'info',
-        pitch: 0,
-        yaw: -175,
-        title: 'Ichki Garderob Shkafi',
-        category: 'Shkaf & Saqlash',
-        price: '$1,200',
-        image: 'https://images.unsplash.com/photo-1558997519-83ea9252def8?auto=format&fit=crop&w=600&q=80',
-        description: 'Shiftgacha bo\'lgan qulay garderob tizimi. Oyna fasad va sensorli ichki LED yoritgichlar bilan.',
-        features: ['Bo\'yi: 3.2 metr', 'Sensorli avtomatik chiroq', 'Silliq yopiluvchi Blum mexanizmi']
+        pitch: -15,
+        yaw: 15,
+        title: 'Gidromassajli Jacuzzi Vanna',
+        category: 'Santexnika',
+        price: '$1,950',
+        image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80',
+        description: 'Ko\'p funksiyali suv massaji va doimiy suv haroratini saqlab turuvchi zamonaviy vanna.',
+        features: ['Gidromassaj 12 ta forsunka', 'Sensorli boshqaruv', 'Akril qoplama']
       }
     ]
   }
@@ -201,7 +214,6 @@ let isMusicPlaying = false;
 let audioContext = null;
 let ambientOscillators = [];
 
-// DOM elementlari
 const elements = {
   badgeRoomName: document.getElementById('badge-room-name'),
   btnToggleMap: document.getElementById('btn-toggle-map'),
@@ -216,6 +228,7 @@ const elements = {
   infoRoomSub: document.getElementById('info-room-sub'),
   infoRoomArea: document.getElementById('info-room-area'),
   infoRoomLight: document.getElementById('info-room-light'),
+  infoRoomFurn: document.getElementById('info-room-furn'),
   infoRoomDesc: document.getElementById('info-room-desc'),
   roomTypeTag: document.getElementById('room-type-tag'),
 
@@ -223,6 +236,9 @@ const elements = {
   btnListenGuide: document.getElementById('btn-listen-guide'),
   btnToggleMusic: document.getElementById('btn-toggle-music'),
   btnFullscreen: document.getElementById('btn-fullscreen'),
+
+  btnUploadPano: document.getElementById('btn-upload-pano'),
+  panoFileInput: document.getElementById('pano-file-input'),
 
   btnOpenContact: document.getElementById('btn-open-contact'),
   btnInquireRoom: document.getElementById('btn-inquire-room'),
@@ -252,7 +268,6 @@ const elements = {
 // 3. PANNELLUM VIEWERNİ ISHGA TUSHIRISH
 // ==========================================================================
 function initVirtualTour() {
-  // Pannellum sahnalar konfiguratsiyasi
   const pannellumScenes = {};
 
   Object.values(ROOMS_DATA).forEach(room => {
@@ -289,7 +304,6 @@ function initVirtualTour() {
     };
   });
 
-  // Viewer obyektini yaratish
   pannellumViewer = pannellum.viewer('panorama', {
     default: {
       firstScene: currentRoomId,
@@ -302,19 +316,16 @@ function initVirtualTour() {
     scenes: pannellumScenes
   });
 
-  // Panorama to'liq yuklanganda UI ni sinxronlashtirish
   pannellumViewer.on('load', () => {
     const activeSceneId = pannellumViewer.getScene();
-    if (activeSceneId && activeSceneId !== currentRoomId) {
+    if (activeSceneId && activeSceneId !== currentRoomId && ROOMS_DATA[activeSceneId]) {
       updateActiveRoomUI(activeSceneId);
     }
   });
 
-  // Boshlang'ich UI holatini yangilash
   updateActiveRoomUI(currentRoomId);
 }
 
-// Xonadan xonaga o'tish hotspot elementi
 function createSceneHotspotElement(hotSpotDiv, args) {
   hotSpotDiv.innerHTML = `
     <div class="hotspot-scene-inner">
@@ -329,7 +340,6 @@ function createSceneHotspotElement(hotSpotDiv, args) {
   });
 }
 
-// Mebel ma'lumoti hotspot elementi
 function createInfoHotspotElement(hotSpotDiv, args) {
   hotSpotDiv.innerHTML = `
     <div class="hotspot-info-inner">
@@ -352,20 +362,15 @@ function switchRoom(roomId) {
 
   currentRoomId = roomId;
 
-  // Agar ovozli gid ishlab turgan bo'lsa, to'xtatish
   if (isVoicePlaying) {
     stopVoiceGuide();
   }
 
-  // Pannellum sahnasini yuklash
   if (pannellumViewer) {
     pannellumViewer.loadScene(roomId);
   }
 
-  // UI komponentlarini yangilash
   updateActiveRoomUI(roomId);
-
-  // Toast xabar chiqarish
   showToast('Xona almashtirildi', `${ROOMS_DATA[roomId].name}ga o'tdingiz.`, 'success');
 }
 
@@ -375,18 +380,16 @@ function updateActiveRoomUI(roomId) {
 
   currentRoomId = roomId;
 
-  // 1. Yuqori badge
   elements.badgeRoomName.textContent = room.nameEn;
-
-  // 2. Xona info kartochkasi
   elements.infoRoomName.textContent = room.name;
   elements.infoRoomSub.textContent = `${room.nameEn} • ${room.subtitle}`;
   elements.infoRoomArea.textContent = room.area;
   elements.infoRoomLight.textContent = room.light;
+  if (elements.infoRoomFurn) elements.infoRoomFurn.textContent = room.furnishing;
   elements.infoRoomDesc.textContent = room.description;
   elements.roomTypeTag.textContent = room.typeTag;
 
-  // 3. Mini-xaritadagi radar pini va faol zona
+  // Mini-xaritadagi radar pini va faol zona
   if (elements.mapRadarPin && room.mapCoords) {
     elements.mapRadarPin.setAttribute('transform', `translate(${room.mapCoords.x}, ${room.mapCoords.y})`);
   }
@@ -399,8 +402,8 @@ function updateActiveRoomUI(roomId) {
     }
   });
 
-  // 4. Pastki slayd kartochkasi
-  elements.roomThumbCards.forEach(card => {
+  // Pastki slayd kartochkasi
+  document.querySelectorAll('.room-thumb-card').forEach(card => {
     if (card.dataset.roomId === roomId) {
       card.classList.add('active');
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
@@ -409,7 +412,7 @@ function updateActiveRoomUI(roomId) {
     }
   });
 
-  // 5. Aloqa formasidagi xona tanlovini moslashtirish
+  // Aloqa formasidagi xona tanlovini moslashtirish
   if (elements.clientRoomSelect) {
     const matchOption = Array.from(elements.clientRoomSelect.options).find(opt => 
       opt.value.toLowerCase().includes(room.name.toLowerCase())
@@ -420,7 +423,6 @@ function updateActiveRoomUI(roomId) {
   }
 }
 
-// Oldingi va keyingi xona navigatsiyasi
 function navigateRoom(direction) {
   const roomKeys = Object.keys(ROOMS_DATA);
   const currentIndex = roomKeys.indexOf(currentRoomId);
@@ -436,7 +438,52 @@ function navigateRoom(direction) {
 }
 
 // ==========================================================================
-// 5. MEBEL / JIHOZ MODALI LOGIKASI
+// 5. O'Z 360° RASMINI YUKLASH FUNKSIYASI (CUSTOM PANORAMA UPLOAD)
+// ==========================================================================
+function handleCustomImageUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    showToast('Xatolik', 'Iltimos, faqat rasm faylini tanlang!', 'error');
+    return;
+  }
+
+  const reader = new FileReader();
+
+  showToast('Yuklanmoqda...', 'Rasmingiz 360° sferaga moslanmoqda...', 'info');
+
+  reader.onload = function(event) {
+    const customDataUrl = event.target.result;
+
+    // Pannellum'da dinamik sahnani qayta ochish
+    if (pannellumViewer) {
+      try {
+        pannellumViewer.destroy();
+      } catch(err) {}
+    }
+
+    pannellumViewer = pannellum.viewer('panorama', {
+      type: 'equirectangular',
+      panorama: customDataUrl,
+      autoLoad: true,
+      autoRotate: -1.0,
+      showControls: false
+    });
+
+    elements.badgeRoomName.textContent = 'Custom 360° Room';
+    elements.infoRoomName.textContent = 'Yuklangan xona';
+    elements.infoRoomSub.textContent = file.name;
+    elements.infoRoomDesc.textContent = 'Siz yuklagan shaxsiy 360° fotosurat muvaffaqiyatli WebGL sferasiga joylashtirildi. Sichqoncha orqali atrofni bemalol aylantirib tomosha qilishingiz mumkin!';
+
+    showToast('Muvaffaqiyatli!', 'Rasmingiz 360° virtual ko\'rinishga aylantirildi! 🎉', 'success');
+  };
+
+  reader.readAsDataURL(file);
+}
+
+// ==========================================================================
+// 6. MEBEL / JIHOZ MODALI LOGIKASI
 // ==========================================================================
 function openFurnitureModal(item) {
   elements.furnitureImg.src = item.image;
@@ -445,7 +492,6 @@ function openFurnitureModal(item) {
   elements.furniturePrice.textContent = item.price;
   elements.furnitureDesc.textContent = item.description;
 
-  // Xususiyatlar ro'yxati
   elements.furnitureFeatures.innerHTML = item.features.map(feat => `
     <div class="feature-pill">
       <i class="fa-solid fa-check"></i>
@@ -453,7 +499,6 @@ function openFurnitureModal(item) {
     </div>
   `).join('');
 
-  // "Shu jihoz haqida so'rash" tugmasi
   elements.btnAskFurniture.onclick = () => {
     closeModal(elements.furnitureModal);
     openContactModal(`Salom! Men "${item.title}" (${item.price}) haqida batafsil ma'lumot olmoqchiman.`);
@@ -463,7 +508,7 @@ function openFurnitureModal(item) {
 }
 
 // ==========================================================================
-// 6. UY EGASI BILAN BOG'LANISH FORMASI VA TELEGRAM INTEGRATSIYASI
+// 7. UY EGASI BILAN BOG'LANISH VA TELEGRAM INTEGRATSIYASI
 // ==========================================================================
 function openContactModal(prefilledMessage = '') {
   if (prefilledMessage) {
@@ -490,7 +535,6 @@ async function handleContactSubmit(e) {
     return;
   }
 
-  // Tugmani yuklanish rejimiga o'tkazish
   const btnText = elements.submitBtn.querySelector('.btn-text');
   const btnLoader = elements.submitBtn.querySelector('.btn-loader');
   elements.submitBtn.disabled = true;
@@ -500,9 +544,7 @@ async function handleContactSubmit(e) {
   try {
     const response = await fetch('/api/contact', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, phone, room, message })
     });
 
@@ -515,7 +557,6 @@ async function handleContactSubmit(e) {
         showToast('Muvaffaqiyatli!', data.message, 'success');
       }
 
-      // Formani tozalash va modalni yopish
       elements.contactForm.reset();
       setTimeout(() => {
         closeModal(elements.contactModal);
@@ -525,7 +566,7 @@ async function handleContactSubmit(e) {
     }
   } catch (err) {
     console.error('Tarmoq xatosi:', err);
-    showToast('Aloqa xatosi', 'Server bilan bog\'lanishda xatolik yuz berdi. Backend server ishlab turganini tekshiring.', 'error');
+    showToast('Aloqa xatosi', 'Server bilan bog\'lanishda xatolik yuz berdi.', 'error');
   } finally {
     elements.submitBtn.disabled = false;
     btnText.style.display = 'inline-flex';
@@ -534,10 +575,8 @@ async function handleContactSubmit(e) {
 }
 
 // ==========================================================================
-// 7. AUDIO GID VA FON MUSIQASI (WEB SPEECH & WEB AUDIO API)
+// 8. AUDIO GID VA FON MUSIQASI
 // ==========================================================================
-
-// Audio Gid (Web Speech API)
 function toggleVoiceGuide() {
   if (isVoicePlaying) {
     stopVoiceGuide();
@@ -552,16 +591,15 @@ function playVoiceGuide() {
     return;
   }
 
-  window.speechSynthesis.cancel(); // Avvalgi nutqlarni tozalash
+  window.speechSynthesis.cancel();
 
-  const currentRoom = ROOMS_DATA[currentRoomId];
+  const currentRoom = ROOMS_DATA[currentRoomId] || { name: 'Xona', voiceGuide: 'Ushbu xonaga xush kelibsiz!' };
   const utterance = new SpeechSynthesisUtterance(currentRoom.voiceGuide);
   
   utterance.lang = 'uz-UZ';
   utterance.rate = 0.95;
   utterance.pitch = 1.0;
 
-  // Nutq tugaganda
   utterance.onend = () => {
     isVoicePlaying = false;
     updateVoiceButtonState(false);
@@ -598,7 +636,6 @@ function updateVoiceButtonState(active) {
   }
 }
 
-// Fon Musiqasi (Web Audio API Sintizatori - tashqi faylga bog'liq emas!)
 function toggleBackgroundMusic() {
   if (isMusicPlaying) {
     stopBackgroundMusic();
@@ -610,16 +647,10 @@ function toggleBackgroundMusic() {
 function startBackgroundMusic() {
   try {
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!audioContext) {
-      audioContext = new AudioCtx();
-    }
+    if (!audioContext) audioContext = new AudioCtx();
+    if (audioContext.state === 'suspended') audioContext.resume();
 
-    if (audioContext.state === 'suspended') {
-      audioContext.resume();
-    }
-
-    // Yumshoq ambient akkordlar (Lofi / Relaxing Chords)
-    const notes = [130.81, 196.00, 246.94, 329.63]; // C3, G3, B3, E4 (Cmaj7)
+    const notes = [130.81, 196.00, 246.94, 329.63];
     ambientOscillators = [];
 
     const masterGain = audioContext.createGain();
@@ -632,11 +663,10 @@ function startBackgroundMusic() {
       
       osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, audioContext.currentTime);
-      
       gain.gain.setValueAtTime(0.02, audioContext.currentTime);
+      
       osc.connect(gain);
       gain.connect(masterGain);
-      
       osc.start();
       ambientOscillators.push(osc);
     });
@@ -664,7 +694,7 @@ function stopBackgroundMusic() {
 }
 
 // ==========================================================================
-// 8. TOAST VA MODAL YORDAMCHILARI
+// 9. TOAST VA MODAL YORDAMCHILARI
 // ==========================================================================
 function openModal(modalEl) {
   modalEl.classList.add('active');
@@ -702,7 +732,6 @@ function showToast(title, message, type = 'info') {
   }, 4000);
 }
 
-// To'liq ekran rejimi
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen().catch(() => {});
@@ -714,13 +743,18 @@ function toggleFullscreen() {
 }
 
 // ==========================================================================
-// 9. HODISALAR TINGLOVCHILARI (EVENT LISTENERS)
+// 10. HODISALAR TINGLOVCHILARI (EVENT LISTENERS)
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Virtual Tourni ishga tushirish
   initVirtualTour();
 
-  // 2. Mini-xarita boshqaruvi
+  // Rasm yuklash hodisalari
+  elements.btnUploadPano.addEventListener('click', () => {
+    elements.panoFileInput.click();
+  });
+  elements.panoFileInput.addEventListener('change', handleCustomImageUpload);
+
+  // Mini-xarita boshqaruvi
   elements.btnToggleMap.addEventListener('click', () => {
     elements.miniMapCard.classList.toggle('hidden');
     elements.btnToggleMap.classList.toggle('active', !elements.miniMapCard.classList.contains('hidden'));
@@ -738,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 3. Xona info kartochkasi boshqaruvi
+  // Xona info kartochkasi boshqaruvi
   elements.btnToggleInfo.addEventListener('click', () => {
     elements.roomInfoCard.classList.toggle('hidden');
     elements.btnToggleInfo.classList.toggle('active', !elements.roomInfoCard.classList.contains('hidden'));
@@ -749,8 +783,8 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.btnToggleInfo.classList.remove('active');
   });
 
-  // 4. Pastki slayd kartochkalari
-  elements.roomThumbCards.forEach(card => {
+  // Pastki slayd kartochkalari
+  document.querySelectorAll('.room-thumb-card').forEach(card => {
     card.addEventListener('click', () => {
       const roomId = card.dataset.roomId;
       if (roomId) switchRoom(roomId);
@@ -760,17 +794,17 @@ document.addEventListener('DOMContentLoaded', () => {
   elements.btnPrevRoom.addEventListener('click', () => navigateRoom('prev'));
   elements.btnNextRoom.addEventListener('click', () => navigateRoom('next'));
 
-  // 5. Audio va Musiqa tugmalari
+  // Audio va Musiqa tugmalari
   elements.btnToggleVoice.addEventListener('click', toggleVoiceGuide);
   elements.btnListenGuide.addEventListener('click', toggleVoiceGuide);
   elements.btnToggleMusic.addEventListener('click', toggleBackgroundMusic);
   elements.btnFullscreen.addEventListener('click', toggleFullscreen);
 
-  // 6. Aloqa formasi tugmalari
+  // Aloqa formasi tugmalari
   elements.btnOpenContact.addEventListener('click', () => openContactModal());
   elements.btnInquireRoom.addEventListener('click', () => {
-    const currentRoom = ROOMS_DATA[currentRoomId];
-    openContactModal(`Salom! Men ${currentRoom.name} (${currentRoom.area}) bo'yicha qiziqmoqdaman. Iltimos, batafsil ma'lumot bersangiz.`);
+    const currentRoom = ROOMS_DATA[currentRoomId] || { name: 'Xona', area: '' };
+    openContactModal(`Salom! Men ${currentRoom.name} (${currentRoom.area}) bo'yicha qiziqmoqdaman.`);
   });
 
   elements.btnCloseContact.addEventListener('click', () => closeModal(elements.contactModal));
@@ -780,13 +814,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   elements.contactForm.addEventListener('submit', handleContactSubmit);
 
-  // 7. Mebel modali yopish
+  // Mebel modali yopish
   elements.btnCloseFurniture.addEventListener('click', () => closeModal(elements.furnitureModal));
   elements.furnitureModal.addEventListener('click', (e) => {
     if (e.target === elements.furnitureModal) closeModal(elements.furnitureModal);
   });
 
-  // 8. Klaviatura boshqaruvi
+  // Klaviatura boshqaruvi
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeModal(elements.furnitureModal);
@@ -800,8 +834,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Boshlang'ich tabriknoma toast
   setTimeout(() => {
-    showToast('Xush kelibsiz!', '360° virtual sayohatga marhamat! Xonani aylantirish uchun sichqonchani suring.', 'info');
+    showToast('Xush kelibsiz!', '360° virtual sayohatga marhamat! 5 ta xonani tomosha qiling yoki o\'z rasmingizni yuklang.', 'info');
   }, 1200);
 });

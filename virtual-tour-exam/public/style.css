@@ -204,6 +204,18 @@ body {
   box-shadow: var(--shadow-gold);
 }
 
+.btn-upload-highlight {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0.35) 100%) !important;
+  border-color: var(--accent-cyan) !important;
+  color: #38bdf8 !important;
+}
+
+.btn-upload-highlight:hover {
+  background: var(--accent-cyan) !important;
+  color: #0f172a !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.6) !important;
+}
+
 .cta-contact-btn {
   background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
   color: #0f172a;
@@ -1154,7 +1166,19 @@ body {
     display: none;
   }
 
-  .cta-contact-btn {
+  .btn-upload-highlight {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0.35) 100%) !important;
+  border-color: var(--accent-cyan) !important;
+  color: #38bdf8 !important;
+}
+
+.btn-upload-highlight:hover {
+  background: var(--accent-cyan) !important;
+  color: #0f172a !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.6) !important;
+}
+
+.cta-contact-btn {
     padding: 10px 14px;
   }
 

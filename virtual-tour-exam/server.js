@@ -6,7 +6,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config(); // Zaxira (root papkadan ham tekshiradi)
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -89,17 +90,19 @@ app.post('/api/contact', async (req, res) => {
       });
     }
 
-    // Telegram uchun xabar matnini chiroyli HTML formatida shakllantirish
+    // Telegram uchun boy formatlangan (HTML + Blockquote) xabar kartochkasi
     const textMessage = `
-🏡 <b>YANGI ARIZA / VIRTUAL SAYOHAT</b>
-━━━━━━━━━━━━━━━━━━━━
-👤 <b>Ism:</b> ${escapeHtml(name)}
-📞 <b>Telefon:</b> ${escapeHtml(phone)}
-📍 <b>Ko'rilayotgan xona:</b> ${escapeHtml(room || "Umumiy bino")}
-💬 <b>Xabar:</b> ${escapeHtml(message || "Izohsiz")}
-⏰ <b>Vaqt:</b> ${formattedDate}
-━━━━━━━━━━━━━━━━━━━━
-🔔 <i>Virtual Tour tizimidan avtomatik xabar</i>
+✨ <b>YANGI BUYURTMA | LUXEESTATE 360°</b> ✨
+━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 <b>Mijoz:</b> <b>${escapeHtml(name)}</b>
+📞 <b>Telefon:</b> <code>${escapeHtml(phone)}</code> <i>(nusxalash uchun bosing)</i>
+📍 <b>Tanlangan xona:</b> 🏛 <b>${escapeHtml(room || "Butun xonadon")}</b>
+⏰ <b>Vaqt:</b> 🗓 ${formattedDate}
+━━━━━━━━━━━━━━━━━━━━━━━━━
+💬 <b>Mijozning xabari:</b>
+<blockquote>${escapeHtml(message || "Xabar qoldirilmagan (mijoz qo'ng'iroq kutmoqda)")}</blockquote>
+━━━━━━━━━━━━━━━━━━━━━━━━━
+🔔 <i>Virtual Tour Web tizimidan real-vaqtda yuborildi</i>
     `.trim();
 
     // Telegram Bot API orqali xabar yuborish
