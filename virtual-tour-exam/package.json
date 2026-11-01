@@ -1,0 +1,25 @@
+{
+  "name": "virtual-tour-exam",
+  "version": "1.0.0",
+  "description": "360° Virtual Tour web-sayti va Telegram orqali uy egasi bilan bog'lanish tizimi",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "virtual-tour",
+    "pannellum",
+    "360-panorama",
+    "express",
+    "nodejs",
+    "telegram-bot"
+  ],
+  "author": "Full-Stack Web Developer",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

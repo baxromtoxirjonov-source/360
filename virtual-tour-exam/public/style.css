@@ -1,0 +1,1238 @@
+/* ==========================================================================
+   LuxeEstate 360° - Asosiy Stillar (style.css)
+   Zamonaviy Glassmorphism & Luxury Real Estate dizayni
+   ========================================================================== */
+
+:root {
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  
+  /* Ranglar palitrasi */
+  --bg-dark: #0a0e17;
+  --bg-glass: rgba(15, 23, 42, 0.78);
+  --bg-glass-card: rgba(30, 41, 59, 0.82);
+  --border-glass: rgba(255, 255, 255, 0.12);
+  --border-gold: rgba(234, 179, 8, 0.5);
+  
+  --gold-primary: #eab308;
+  --gold-light: #fef08a;
+  --gold-glow: rgba(234, 179, 8, 0.45);
+  --accent-cyan: #38bdf8;
+  --accent-emerald: #10b981;
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dark: #0f172a;
+
+  --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 0, 0, 0.4);
+  --shadow-gold: 0 0 25px rgba(234, 179, 8, 0.35);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset va bazaviy parametrlar */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+}
+
+/* ==========================================================================
+   1. ASOSIY PANORAMA MAYDONI
+   ========================================================================== */
+#panorama {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  background-color: #000;
+}
+
+/* Pannellum standart tugmalarini dizaynga moslashtirish */
+.pnlm-controls-container {
+  display: none !important; /* Biz o'zimizning zamonaviy boshqaruvimizdan foydalanamiz */
+}
+
+.pnlm-load-box {
+  background: var(--bg-glass) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--border-gold) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text-main) !important;
+  box-shadow: var(--shadow-gold) !important;
+  padding: 1.5rem 2rem !important;
+}
+
+.pnlm-lmsg {
+  font-family: var(--font-main) !important;
+  font-weight: 600 !important;
+  color: var(--gold-primary) !important;
+}
+
+/* ==========================================================================
+   2. YUQORI BOSHQARUV PANELI (HEADER)
+   ========================================================================== */
+.top-nav {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  right: 20px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  pointer-events: none; /* Bolalar elementlari o'zaro hodisalarni ushlaydi */
+}
+
+.brand {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+}
+
+.brand-logo {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  font-size: 1.1rem;
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.5);
+}
+
+.brand-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}
+
+.brand-title span {
+  color: var(--gold-primary);
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background-color: var(--accent-emerald);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px var(--accent-emerald);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.header-actions {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-icon-btn {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  color: var(--text-main);
+  padding: 10px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-lg);
+}
+
+.nav-icon-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: var(--border-gold);
+  color: var(--gold-primary);
+  transform: translateY(-2px);
+}
+
+.nav-icon-btn.active {
+  background: var(--gold-primary);
+  color: var(--text-dark);
+  border-color: var(--gold-light);
+  box-shadow: var(--shadow-gold);
+}
+
+.cta-contact-btn {
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+  color: #0f172a;
+  border: none;
+  padding: 11px 22px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  box-shadow: 0 4px 18px rgba(234, 179, 8, 0.4);
+  transition: var(--transition-fast);
+}
+
+.cta-contact-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 24px rgba(234, 179, 8, 0.6);
+}
+
+/* ==========================================================================
+   3. INTERAKTIV 2D MINI-XARITA (FLOOR PLAN)
+   ========================================================================== */
+.mini-map-card {
+  position: absolute;
+  top: 85px;
+  right: 20px;
+  z-index: 15;
+  width: 320px;
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 16px;
+  transition: var(--transition-normal);
+  transform-origin: top right;
+}
+
+.mini-map-card.hidden {
+  opacity: 0;
+  transform: scale(0.85) translateY(-20px);
+  pointer-events: none;
+}
+
+.map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 8px;
+}
+
+.map-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--gold-primary);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.map-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: var(--transition-fast);
+}
+
+.map-close-btn:hover {
+  color: #fff;
+}
+
+.map-wrapper {
+  background: rgba(10, 14, 23, 0.9);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.floorplan-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.exterior-wall {
+  fill: #0a0f1d;
+  stroke: #334155;
+  stroke-width: 4;
+}
+
+.room-zone {
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.room-rect {
+  fill: url(#roomGrad);
+  stroke: #475569;
+  stroke-width: 1.5;
+  transition: all 0.3s ease;
+}
+
+.room-zone:hover .room-rect {
+  fill: rgba(56, 189, 248, 0.2);
+  stroke: var(--accent-cyan);
+}
+
+.room-zone.active .room-rect {
+  fill: url(#activeRoomGrad);
+  stroke: var(--gold-primary);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.5));
+}
+
+.room-label-title {
+  fill: #f8fafc;
+  font-size: 14px;
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.room-label-sub {
+  fill: #94a3b8;
+  font-size: 10px;
+  font-weight: 500;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.room-zone.active .room-label-title {
+  fill: var(--gold-primary);
+}
+
+/* Radar Pulse Marker */
+.pulse-ring {
+  fill: rgba(234, 179, 8, 0.25);
+  stroke: var(--gold-primary);
+  stroke-width: 2;
+  animation: radar-wave 2s infinite ease-out;
+  transform-origin: center;
+}
+
+.pulse-core {
+  fill: var(--gold-primary);
+  filter: drop-shadow(0 0 8px rgba(234, 179, 8, 0.8));
+}
+
+@keyframes radar-wave {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.map-footer-hint {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   4. XONA HAQIDA MA'LUMOT PANEL (ROOM INFO CARD)
+   ========================================================================== */
+.room-info-card {
+  position: absolute;
+  top: 85px;
+  left: 20px;
+  z-index: 15;
+  width: 340px;
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 20px;
+  transition: var(--transition-normal);
+  transform-origin: top left;
+}
+
+.room-info-card.hidden {
+  opacity: 0;
+  transform: scale(0.85) translateY(-20px);
+  pointer-events: none;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.card-tag {
+  background: rgba(234, 179, 8, 0.15);
+  color: var(--gold-primary);
+  border: 1px solid var(--border-gold);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.card-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: var(--transition-fast);
+}
+
+.card-close-btn:hover {
+  color: #fff;
+}
+
+.room-name {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.room-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.room-specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spec-item i {
+  color: var(--gold-primary);
+  font-size: 1.1rem;
+}
+
+.spec-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.spec-val {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.room-description {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  margin-bottom: 16px;
+}
+
+.room-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-listen-guide, .btn-inquire-room {
+  width: 100%;
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-fast);
+}
+
+.btn-listen-guide {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-main);
+}
+
+.btn-listen-guide:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+}
+
+.btn-inquire-room {
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-primary);
+}
+
+.btn-inquire-room:hover {
+  background: var(--gold-primary);
+  color: #0f172a;
+}
+
+/* ==========================================================================
+   5. PASTKI TEZKOR O'TISH PANELI (ROOM SELECTOR BAR)
+   ========================================================================== */
+.bottom-bar {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  padding: 10px 16px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  max-width: 90vw;
+}
+
+.nav-arrow-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.nav-arrow-btn:hover {
+  background: var(--gold-primary);
+  color: #0f172a;
+  border-color: var(--gold-primary);
+}
+
+.room-thumbnails-slider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.room-thumbnails-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.room-thumb-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.room-thumb-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.room-thumb-card.active {
+  background: rgba(234, 179, 8, 0.15);
+  border: 1.5px solid var(--gold-primary);
+  box-shadow: var(--shadow-gold);
+}
+
+.thumb-img-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+
+.room-thumb-card.active .thumb-img-wrap {
+  border-color: var(--gold-primary);
+}
+
+.thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb-badge {
+  display: none; /* Kichik joy uchun yashirildi */
+}
+
+.thumb-info h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.room-thumb-card.active .thumb-info h4 {
+  color: var(--gold-primary);
+}
+
+.thumb-info span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   6. CUSTOM PANNELLUM HOTSPOT STILLARI
+   ========================================================================== */
+
+/* Hotspot 1: Xonadan xonaga o'tish (Scene transition) */
+.custom-hotspot-scene {
+  width: 46px;
+  height: 46px;
+  position: relative;
+  cursor: pointer;
+}
+
+.hotspot-scene-inner {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #facc15 0%, #ca8a04 100%);
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  font-size: 1.15rem;
+  box-shadow: 0 0 20px rgba(234, 179, 8, 0.8);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.custom-hotspot-scene::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border: 2px solid var(--gold-primary);
+  border-radius: 50%;
+  animation: hotspot-radar 2s infinite ease-out;
+}
+
+@keyframes hotspot-radar {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.custom-hotspot-scene:hover .hotspot-scene-inner {
+  transform: scale(1.18);
+  background: #ffffff;
+  color: #ca8a04;
+}
+
+.hotspot-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-gold);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transition: var(--transition-fast);
+}
+
+.custom-hotspot-scene:hover .hotspot-tooltip,
+.custom-hotspot-info:hover .hotspot-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Hotspot 2: Mebel / Jihoz haqida ma'lumot (Info Hotspot) */
+.custom-hotspot-info {
+  width: 38px;
+  height: 38px;
+  position: relative;
+  cursor: pointer;
+}
+
+.hotspot-info-inner {
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 2px solid var(--accent-cyan);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+  font-size: 1rem;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+  transition: all 0.3s ease;
+}
+
+.custom-hotspot-info::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 1.5px solid var(--accent-cyan);
+  border-radius: 50%;
+  animation: hotspot-radar 2.4s infinite ease-out;
+}
+
+.custom-hotspot-info:hover .hotspot-info-inner {
+  transform: scale(1.2);
+  background: var(--accent-cyan);
+  color: #0f172a;
+}
+
+/* ==========================================================================
+   7. MODALLAR (MEBEL VA BOG'LANISH FORMASI)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  background: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.92);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active .modal-dialog {
+  transform: scale(1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.modal-close:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+/* Mebel modali */
+.modal-hero-image {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.modal-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-chip {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.modal-title-row h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: #fff;
+}
+
+.price-tag {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-emerald);
+}
+
+.modal-desc {
+  font-size: 0.86rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.feature-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: #e2e8f0;
+}
+
+.feature-pill i {
+  color: var(--gold-primary);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+  color: #0f172a;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-fast);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+/* Bog'lanish formasi modali */
+.contact-dialog {
+  max-width: 440px;
+  padding: 24px;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.icon-bubble {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 12px;
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-primary);
+  font-size: 1.4rem;
+}
+
+.contact-header h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+.contact-header p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-group label i {
+  color: var(--gold-primary);
+  font-size: 0.85rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  transition: var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--gold-primary);
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.25);
+}
+
+.form-group select option {
+  background: #0f172a;
+  color: #fff;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+  color: #0f172a;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(234, 179, 8, 0.35);
+  transition: var(--transition-fast);
+  margin-top: 4px;
+}
+
+.submit-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.form-footnote {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   8. TOAST BILDIRISHNOMALAR (ALERTS)
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 90px;
+  right: 25px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 280px;
+  max-width: 380px;
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: var(--shadow-lg);
+  animation: slide-in-toast 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
+}
+
+.toast.toast-success {
+  border-left: 4px solid var(--accent-emerald);
+}
+
+.toast.toast-success i {
+  color: var(--accent-emerald);
+}
+
+.toast.toast-warning {
+  border-left: 4px solid var(--gold-primary);
+}
+
+.toast.toast-warning i {
+  color: var(--gold-primary);
+}
+
+.toast.toast-error {
+  border-left: 4px solid #ef4444;
+}
+
+.toast.toast-error i {
+  color: #ef4444;
+}
+
+.toast-content h5 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.toast-content p {
+  font-size: 0.76rem;
+  color: #cbd5e1;
+  line-height: 1.35;
+}
+
+@keyframes slide-in-toast {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ==========================================================================
+   9. MOBIL VA PLANSHET MOSLASHUVCHANLIGI (RESPONSIVE)
+   ========================================================================== */
+@media (max-width: 992px) {
+  .top-nav {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+  }
+  
+  .btn-label {
+    display: none; /* Kichikroq ekranda faqat ikonkalarni qoldiramiz */
+  }
+
+  .cta-contact-btn span {
+    display: none;
+  }
+
+  .cta-contact-btn {
+    padding: 10px 14px;
+  }
+
+  .mini-map-card {
+    width: 280px;
+    top: 75px;
+    right: 12px;
+  }
+
+  .room-info-card {
+    width: 290px;
+    top: 75px;
+    left: 12px;
+  }
+}
+
+@media (max-width: 680px) {
+  .top-nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .brand {
+    padding: 6px 12px;
+  }
+
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
+  }
+
+  .brand-title {
+    font-size: 1rem;
+  }
+
+  .nav-icon-btn {
+    padding: 8px 10px;
+    font-size: 0.88rem;
+  }
+
+  .bottom-bar {
+    bottom: 12px;
+    padding: 8px 10px;
+    width: calc(100% - 24px);
+    justify-content: space-between;
+  }
+
+  .room-thumb-card {
+    padding: 4px 8px 4px 4px;
+  }
+
+  .thumb-img-wrap {
+    width: 36px;
+    height: 36px;
+  }
+
+  .thumb-info h4 {
+    font-size: 0.78rem;
+  }
+
+  .thumb-info span {
+    font-size: 0.65rem;
+  }
+
+  .mini-map-card {
+    width: calc(100% - 24px);
+    right: 12px;
+    left: 12px;
+    top: auto;
+    bottom: 85px;
+  }
+
+  .room-info-card {
+    width: calc(100% - 24px);
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 85px;
+  }
+}

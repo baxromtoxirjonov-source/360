@@ -1,0 +1,12 @@
+# Bog'liqliklar (dependencies)
+node_modules/
+npm-debug.log*
+
+# Maxfiy ma'lumotlar (.env tokenlari)
+.env
+.env.local
+
+# Vercel va operatsion tizim fayllari
+.vercel
+.DS_Store
+Thumbs.db

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LuxeEstate 360° - Interaktiv Virtual Uy Sayohati</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏡</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Pannellum 360 Panorama Viewer CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+
+  <!-- Asosiy Custom Stillar -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ASOSIY PANORAMA KONTEYNERI -->
+  <div id="panorama"></div>
+
+  <!-- YUQORI BOSHQARUV PANELI (HEADER) -->
+  <header class="top-nav">
+    <div class="brand">
+      <div class="brand-logo">
+        <i class="fa-solid fa-compass"></i>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title">LuxeEstate <span>360°</span></div>
+        <div class="brand-subtitle" id="current-room-badge">
+          <span class="live-dot"></span> <span id="badge-room-name">Living Room</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Mini xaritani ochish/yopish -->
+      <button class="nav-icon-btn" id="btn-toggle-map" title="2D Xonadon rejasi" aria-label="Xarita">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <span class="btn-label">Reja</span>
+      </button>
+
+      <!-- Audio Gid ovozi -->
+      <button class="nav-icon-btn" id="btn-toggle-voice" title="Ovozli Gidni tinglash" aria-label="Audio Gid">
+        <i class="fa-solid fa-headphones"></i>
+        <span class="btn-label">Audio Gid</span>
+      </button>
+
+      <!-- Fon musiqasi -->
+      <button class="nav-icon-btn" id="btn-toggle-music" title="Fon musiqasi" aria-label="Fon musiqasi">
+        <i class="fa-solid fa-music"></i>
+        <span class="btn-label">Musiqa</span>
+      </button>
+
+      <!-- Xona haqida ma'lumot paneli -->
+      <button class="nav-icon-btn" id="btn-toggle-info" title="Xona ma'lumotlari" aria-label="Ma'lumot">
+        <i class="fa-solid fa-circle-info"></i>
+        <span class="btn-label">Ma'lumot</span>
+      </button>
+
+      <!-- To'liq ekran rejimi -->
+      <button class="nav-icon-btn" id="btn-fullscreen" title="To'liq ekran" aria-label="To'liq ekran">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+
+      <!-- CTA: Uy egasi bilan bog'lanish tugmasi -->
+      <button class="cta-contact-btn" id="btn-open-contact">
+        <i class="fa-solid fa-paper-plane"></i>
+        <span>Uy egasi bilan bog'lanish</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- INTERAKTIV 2D MINI-XARITA (FLOOR PLAN) -->
+  <aside class="mini-map-card" id="mini-map-card">
+    <div class="map-header">
+      <div class="map-title">
+        <i class="fa-solid fa-layer-group"></i> 2D Uy Rejasi (Floor Plan)
+      </div>
+      <button class="map-close-btn" id="btn-close-map" title="Xaritani yopish">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="map-wrapper">
+      <svg viewBox="0 0 400 320" class="floorplan-svg" id="floorplan-svg">
+        <!-- Devorlar va pol fonlari -->
+        <defs>
+          <linearGradient id="roomGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e293b" stop-opacity="0.85"/>
+            <stop offset="100%" stop-color="#0f172a" stop-opacity="0.85"/>
+          </linearGradient>
+          <linearGradient id="activeRoomGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#eab308" stop-opacity="0.2"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Tashqi chegara devorlari -->
+        <rect x="20" y="20" width="360" height="280" rx="12" class="exterior-wall" />
+
+        <!-- 1. Mehmonxona (Living Room) - Katta zona chap tomonda -->
+        <g class="room-zone" id="zone-living-room" data-room="living-room">
+          <rect x="30" y="30" width="180" height="260" rx="8" class="room-rect"/>
+          <text x="120" y="145" class="room-label-title">Mehmonxona</text>
+          <text x="120" y="165" class="room-label-sub">Living Room • 32 m²</text>
+        </g>
+
+        <!-- 2. Oshxona (Kitchen) - O'ng yuqori qism -->
+        <g class="room-zone" id="zone-kitchen" data-room="kitchen">
+          <rect x="220" y="30" width="150" height="120" rx="8" class="room-rect"/>
+          <text x="295" y="85" class="room-label-title">Oshxona</text>
+          <text x="295" y="103" class="room-label-sub">Kitchen • 18 m²</text>
+        </g>
+
+        <!-- 3. Yotoqxona (Bedroom) - O'ng pastki qism -->
+        <g class="room-zone" id="zone-bedroom" data-room="bedroom">
+          <rect x="220" y="160" width="150" height="130" rx="8" class="room-rect"/>
+          <text x="295" y="220" class="room-label-title">Yotoqxona</text>
+          <text x="295" y="238" class="room-label-sub">Bedroom • 22 m²</text>
+        </g>
+
+        <!-- Eshiklar / O'tish koridorlari chizig'i -->
+        <path d="M 210,90 L 220,90 M 210,225 L 220,225" stroke="#eab308" stroke-width="3" stroke-dasharray="4,4" opacity="0.8"/>
+
+        <!-- Radar Pulse Marker (Hozirgi xonani ko'rsatib turadi) -->
+        <g id="map-radar-pin" class="radar-pin" transform="translate(120, 150)">
+          <circle r="18" class="pulse-ring"></circle>
+          <circle r="8" class="pulse-core"></circle>
+          <circle r="3" fill="#ffffff"></circle>
+        </g>
+      </svg>
+    </div>
+    <div class="map-footer-hint">
+      <i class="fa-regular fa-hand-pointer"></i> Xonaga o'tish uchun ustiga bosing
+    </div>
+  </aside>
+
+  <!-- XONA HAQIDA MA'LUMOT PANEL (ROOM INFO CARD) -->
+  <div class="room-info-card" id="room-info-card">
+    <div class="card-top">
+      <div class="card-tag" id="room-type-tag">Asosiy xona</div>
+      <button class="card-close-btn" id="btn-close-info" title="Yopish">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    
+    <h2 class="room-name" id="info-room-name">Mehmonxona</h2>
+    <p class="room-subtitle" id="info-room-sub">Living Room • Keng va yorug' zal</p>
+
+    <div class="room-specs-grid">
+      <div class="spec-item">
+        <i class="fa-solid fa-vector-square"></i>
+        <div>
+          <span class="spec-label">Maydoni</span>
+          <span class="spec-val" id="info-room-area">32 m²</span>
+        </div>
+      </div>
+      <div class="spec-item">
+        <i class="fa-solid fa-arrows-up-down"></i>
+        <div>
+          <span class="spec-label">Shift balandligi</span>
+          <span class="spec-val">3.2 metr</span>
+        </div>
+      </div>
+      <div class="spec-item">
+        <i class="fa-solid fa-sun"></i>
+        <div>
+          <span class="spec-label">Yoritilishi</span>
+          <span class="spec-val" id="info-room-light">Tabiiy quyosh nuri</span>
+        </div>
+      </div>
+      <div class="spec-item">
+        <i class="fa-solid fa-couch"></i>
+        <div>
+          <span class="spec-label">Jihozlanishi</span>
+          <span class="spec-val">To'liq mebel bilan</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="room-description" id="info-room-desc">
+      Keng derazali mehmondo'st zal. Yuqori sifatli yog'och pol va zamonaviy Italiya mebellari bilan ta'minlangan.
+    </p>
+
+    <div class="room-card-actions">
+      <button class="btn-listen-guide" id="btn-listen-guide">
+        <i class="fa-solid fa-volume-high"></i> Ovozli sharhni tinglash
+      </button>
+      <button class="btn-inquire-room" id="btn-inquire-room">
+        <i class="fa-solid fa-tag"></i> Shu xonaga buyurtma berish
+      </button>
+    </div>
+  </div>
+
+  <!-- PASTKI TEZKOR O'TISH PANELI (ROOM SELECTOR BAR) -->
+  <footer class="bottom-bar">
+    <button class="nav-arrow-btn" id="btn-prev-room" title="Oldingi xona">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <div class="room-thumbnails-slider" id="room-slider">
+      <!-- 1. Mehmonxona -->
+      <div class="room-thumb-card active" data-room-id="living-room">
+        <div class="thumb-img-wrap">
+          <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=400&q=80" alt="Mehmonxona" class="thumb-img">
+          <span class="thumb-badge">32 m²</span>
+        </div>
+        <div class="thumb-info">
+          <h4>Mehmonxona</h4>
+          <span>Living Room</span>
+        </div>
+      </div>
+
+      <!-- 2. Oshxona -->
+      <div class="room-thumb-card" data-room-id="kitchen">
+        <div class="thumb-img-wrap">
+          <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=400&q=80" alt="Oshxona" class="thumb-img">
+          <span class="thumb-badge">18 m²</span>
+        </div>
+        <div class="thumb-info">
+          <h4>Oshxona</h4>
+          <span>Kitchen Lounge</span>
+        </div>
+      </div>
+
+      <!-- 3. Yotoqxona -->
+      <div class="room-thumb-card" data-room-id="bedroom">
+        <div class="thumb-img-wrap">
+          <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=400&q=80" alt="Yotoqxona" class="thumb-img">
+          <span class="thumb-badge">22 m²</span>
+        </div>
+        <div class="thumb-info">
+          <h4>Yotoqxona</h4>
+          <span>Master Bedroom</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="nav-arrow-btn" id="btn-next-room" title="Keyingi xona">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </footer>
+
+  <!-- MEBEL / JİHOZ HAQIDA POP-UP MODAL (FURNITURE HOTSPOT MODAL) -->
+  <div class="modal-overlay" id="furniture-modal">
+    <div class="modal-dialog glass-card">
+      <button class="modal-close" id="btn-close-furniture" title="Yopish">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <div class="modal-hero-image">
+        <img id="furniture-img" src="" alt="Jihoz rasmi">
+        <span class="hero-chip" id="furniture-category">Mebel</span>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-title-row">
+          <h3 id="furniture-title">Premium Divan</h3>
+          <span class="price-tag" id="furniture-price">$1,450</span>
+        </div>
+        
+        <p class="modal-desc" id="furniture-desc">
+          Italiya matosidan ishlangan qulay va ergonomik burchak divani.
+        </p>
+
+        <div class="features-list" id="furniture-features">
+          <!-- Dinamik xususiyatlar -->
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-primary" id="btn-ask-furniture">
+            <i class="fa-solid fa-comment-dots"></i> Shu jihoz haqida so'rash
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UY EGASI BILAN BOG'LANISH FORMASI MODALI (CONTACT FORM) -->
+  <div class="modal-overlay" id="contact-modal">
+    <div class="modal-dialog glass-card contact-dialog">
+      <button class="modal-close" id="btn-close-contact" title="Yopish">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="contact-header">
+        <div class="icon-bubble">
+          <i class="fa-solid fa-building-user"></i>
+        </div>
+        <h3>Uy egasi bilan bog'lanish</h3>
+        <p>Arizangiz to'g'ridan-to'g'ri Telegram orqali uy egasiga yetkaziladi va 15 daqiqa ichida sizga aloqaga chiqiladi.</p>
+      </div>
+
+      <form id="contact-form" class="contact-form">
+        <div class="form-group">
+          <label for="client-name"><i class="fa-regular fa-user"></i> Ism va familiyangiz *</label>
+          <input type="text" id="client-name" name="name" placeholder="Masalan: Sardor Aliyev" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label for="client-phone"><i class="fa-solid fa-phone"></i> Telefon raqamingiz *</label>
+          <input type="tel" id="client-phone" name="phone" placeholder="+998 90 123 45 67" required autocomplete="tel">
+        </div>
+
+        <div class="form-group">
+          <label for="client-room"><i class="fa-solid fa-door-open"></i> Qiziqqan xonangiz</label>
+          <select id="client-room" name="room">
+            <option value="Mehmonxona (Living Room)">Mehmonxona (Living Room)</option>
+            <option value="Oshxona (Kitchen)">Oshxona (Kitchen)</option>
+            <option value="Yotoqxona (Bedroom)">Yotoqxona (Bedroom)</option>
+            <option value="Butun xonadon (To'liq uy)" selected>Butun xonadon (To'liq uy)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="client-message"><i class="fa-regular fa-message"></i> Savolingiz yoki qo'shimcha izoh</label>
+          <textarea id="client-message" name="message" rows="3" placeholder="Masalan: Narxini kelishsak bo'ladimi? Bugun ko'rishga kelsam bo'ladimi?"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">
+          <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Xabarni yuborish</span>
+          <span class="btn-loader" style="display: none;"><i class="fa-solid fa-spinner fa-spin"></i> Yuborilmoqda...</span>
+        </button>
+
+        <div class="form-footnote">
+          <i class="fa-solid fa-shield-halved"></i> Sizning ma'lumotlaringiz xavfsiz saqlanadi
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST BILDIRISHNOMA (ALERTS) -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Pannellum JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+  
+  <!-- Asosiy Skript -->
+  <script src="script.js"></script>
+</body>
+</html>

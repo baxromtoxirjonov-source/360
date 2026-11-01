@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Tour - Xonalar bo'yicha sayohat</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+e2lK29pb0HqMdTku0Dcol2j+Iex64EzFrJnSkR9Fo="
+    crossorigin=""/>
+  <style>
+    :root {
+      --primary: #2d3436;
+      --secondary: #636e72;
+      --accent: #e8c467;
+      --bg: #f5f6fa;
+      --card: #ffffff;
+      --text: #2d3436;
+      --text-light: #636e72;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 1rem 2rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    /* Main content */
+    main {
+      margin-top: 80px;
+      padding: 2rem;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Panorama container */
+    #panorama-container {
+      position: relative;
+      width: 100%;
+      min-height: 500px;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    #pannellum-viewer {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Controls */
+    .controls {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .controls h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .hotspot-list {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .hotspot-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+      width: 100%;
+    }
+
+    .hotspot-btn:hover {
+      background: var(--accent);
+    }
+
+    .hotspot-btn.active {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    /* Room info panel */
+    #room-info {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-top: 1rem;
+      display: none;
+    }
+
+    #room-info.active {
+      display: block;
+    }
+
+    .room-info-img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .room-info h4 {
+      margin-bottom: 0.25rem;
+      font-size: 1.1rem;
+    }
+
+    .room-info p {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    /* Navigation buttons */
+    .nav-btns {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .nav-btn {
+      flex: 1;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent);
+    }
+
+    /* Room selector */
+    .room-selector {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: var(--card);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .room-selector h3 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .room-option {
+      background: var(--bg);
+      border: 2px solid var(--primary);
+      border-radius: 6px;
+      padding: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .room-option:hover {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .room-option.active {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    /* Info button */
+    .info-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--accent);
+      color: var(--primary);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .info-btn:hover {
+      background: #d4aa4a;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .header-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .hotspot-btn {
+        width: 100%;
+      }
+      
+      .nav-btn {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <h1 class="header-title">Virtual Tour - Xonalar bo'yicha sayohat</h1>
+      <button class="info-btn" onclick="showRoomInfo()" title="Xona haqida ma'lumot">ℹ</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="panorama-container">
+      <div id="pannellum-viewer"></div>
+    </div>
+
+    <div class="controls">
+      <h3>Maxsohotlar (Hotspots)</h3>
+      <div class="hotspot-list" id="hotspot-list">
+        <!-- Hotspots will be generated dynamically -->
+      </div>
+    </div>
+
+    <div id="room-info" class="room-info">
+      <div class="room-info-img" id="room-img"></div>
+      <div>
+        <h4 id="room-name">Xona nomi</h4>
+        <p id="room-desc">Xona haqidagi qisqa ma'lumot</p>
+      </div>
+      <div class="nav-btns">
+        <button class="nav-btn" onclick="prevRoom()">Oldingi xona</button>
+        <button class="nav-btn" onclick="nextRoom()">Keyingi xona</button>
+      </div>
+    </div>
+
+    <div class="room-selector">
+      <h3>Xonalay tiklaning</h3>
+      <div class="room-grid" id="room-grid">
+        <!-- Room options will be generated dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Pannellum.js from CDN -->
+  <script src="https://unpkg.com/pannellum@2.5.0/dist/pannellum.js"></script>
+
+  <script>
+    // Pannellum panorama viewers for each room
+    const panoramas = [
+      {
+        id: 'living-room',
+        title: 'Mehmonxona / Living Room',
+        description: 'Qurilma bilanishtilganda ajralgan mehmonxona, keng yaqoi bilan surilib.',
+        panoUrl: 'https://cdn.polyhaven.com/asset/combination_room/combination_room_8k.jpg',
+        hotspots: [
+          { x: 0.5, y: 0.3, title: 'Xona', description: 'Mehmonxona' },
+          { x: 0.2, y: 0.7, title: 'Kapiga', description: 'Chiqish kapisi' }
+        ]
+      },
+      {
+        id: 'kitchen',
+        title: 'Oshxona / Kitchen',
+        description: 'Quydagi osonidan iborat toliq oq-surilib bo\'lgan oshxona.',
+        panoUrl: 'https://cdn.polyhaven.com/asset/kiara_interior/kiara_interior_8k.jpg',
+        hotspots: [
+          { x: 0.5, y: 0.2, title: 'Osh', description: 'Taom ta\'tqi' },
+          { x: 0.8, y: 0.6, title: 'Dasturchi', description: 'Istov va peshkamlar' }
+        ]
+      },
+      {
+        id: 'bedroom',
+        title: 'Yotoqxona / Bedroom',
+        description: 'Sovg\'a bilan surilib, ajralgan yotoqxona.',
+        panoUrl: 'https://cdn.polyhaven.com/asset/glasshouse_interior/glasshouse_interior_8k.jpg',
+        hotspots: [
+          { x: 0.5, y: 0.3, title: 'Yoton', description: 'To\'liq sovga' },
+          { x: 0.1, y: 0.6, title: 'Shkaf', description: 'Majburiy shkaf' }
+        ]
+      }
+    ];
+
+    let currentRoomIndex = 0;
+
+    // Initialize first panorama
+    function initPanorama() {
+      const viewer = document.getElementById('pannellum-viewer');
+      const pano = panoramas[currentRoomIndex];
+      
+      pannellum.viewer('pannellum-viewer', {
+        panorama: pano.panoUrl,
+        title: pano.title,
+        hfov: 100,
+        autoResize: true,
+        hotspots: pano.hotspots.map(h => ({
+          yaw: h.x * 360,
+          pitch: -h.y * 180,
+          type: 'text',
+          id: h.id,
+          title: h.title,
+          description: h.description,
+          pitch: -h.y * 180,
+          yaw: h.x * 360
+        })),
+        onhotspotclick: function(id) {
+          const hotspot = pano.hotspots.find(h => h.id === id);
+          if (hotspot) {
+            showRoomInfo(hotspot.title, hotspot.description);
+          }
+        }
+      });
+      
+      updateRoomInfo();
+      updateHotspotButtons();
+      updateRoomSelector();
+    }
+
+    // Update room info panel
+    function updateRoomInfo(title = panoramas[currentRoomIndex].title, desc = panoramas[currentRoomIndex].description) {
+      document.getElementById('room-name').textContent = title;
+      document.getElementById('room-desc').textContent = desc;
+      document.getElementById('room-info').classList.add('active');
+      
+      const imgSrc = `https://cdn.polyhaven.com/asset/${currentRoomIndex === 0 ? 'combination_room' : currentRoomIndex === 1 ? 'kiara_interior' : 'glasshouse_interior'}/teaser.jpg`;
+      document.getElementById('room-img').src = imgSrc;
+    }
+
+    // Show room info for specific hotspot
+    function showRoomInfo(title, desc) {
+      updateRoomInfo(title, desc);
+    }
+
+    // Update hotspot buttons
+    function updateHotspotButtons() {
+      const container = document.getElementById('hotspot-list');
+      container.innerHTML = '';
+      
+      const pano = panoramas[currentRoomIndex];
+      pano.hotspots.forEach((hotspot, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'hotspot-btn' + (i === 0 ? ' active' : '');
+        btn.innerHTML = `${hotspot.title}<span style="font-size: 0.7rem;">(${hotspot.description})</span>`;
+        btn.onclick = () => showRoomInfo(hotspot.title, hotspot.description);
+        container.appendChild(btn);
+      });
+    }
+
+    // Update room selector
+    function updateRoomSelector() {
+      const container = document.getElementById('room-grid');
+      container.innerHTML = '';
+      
+      panoramas.forEach((pano, i) => {
+        const option = document.createElement('div');
+        option.className = 'room-option' + (i === currentRoomIndex ? ' active' : '');
+        option.innerHTML = `<strong>${pano.title}</strong><br>${pano.description}`;
+        option.onclick = () => goToRoom(i);
+        container.appendChild(option);
+      });
+    }
+
+    // Navigate to previous room
+    function prevRoom() {
+      currentRoomIndex = (currentRoomIndex - 1 + panoramas.length) % panoramas.length;
+      reloadPanorama();
+    }
+
+    // Navigate to next room
+    function nextRoom() {
+      currentRoomIndex = (currentRoomIndex + 1) % panoramas.length;
+      reloadPanorama();
+    }
+
+    // Go to specific room
+    function goToRoom(index) {
+      currentRoomIndex = index;
+      reloadPanorama();
+    }
+
+    // Reload panorama with new room
+    function reloadPanorama() {
+      initPanorama();
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', initPanorama);
+  </script>
+</body>
+</html>
